@@ -5,7 +5,7 @@
 
 
 #include <BME280I2C.h>
-BME280I2C bme;  
+BME280I2C bme;
 
 bool metric = true;
 
@@ -13,6 +13,7 @@ bool metric = true;
  * HVAC Control Unit (hvac_cu)
  * Peter Cairns
  * June 2017
+  Testing branch added
   Connecting the BME280 Sensor:
   Sensor              ->  Board
   -----------------------------
@@ -34,8 +35,8 @@ float fr_low=150;       //low VMC flowrate [m3/hr]
 float cp=1.005;         //specific heat air [kJ/kg.K]
 float rho=1.2;          //air density [kg/m3]
 
-float q;             //heat loss [kW]  
-float in_fr_en;      //fresh inlet energy [kW/m3]  
+float q;             //heat loss [kW]
+float in_fr_en;      //fresh inlet energy [kW/m3]
 float in_wa_en;      //waste inlet energy [kW/m3]
 float ex_fr_en;      //fresh exhaust energy [kW/m3]
 float efficiency;    //heat exchanger efficiency
@@ -61,12 +62,12 @@ float in_wa_temp;   //waste inlet temp [C]
 float ex_fr_temp;   //fresh exhaust temp [C]
 float ex_wa_temp;   //waste exhaust temp [C]
 float house_inlet;  // fresh air feed to house (post HE) [C]
- 
+
 void setup() {
 
 
 
-  
+
    // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
   Serial.println("VMC Control Unit v1.0");
@@ -92,12 +93,12 @@ void loop() {
  *  capture the sensor data
  *  -----------------------
  */
-  
+
   bme.read(in_fr_pres,in_fr_temp,in_fr_humd);
   in_wa_temp = smoothThermistor1.temperature();
   ex_fr_temp = smoothThermistor2.temperature();
   ex_wa_temp = smoothThermistor3.temperature();
-  
+
 
 /*
  *  ventilation bypass activation
@@ -140,7 +141,7 @@ void loop() {
     {
       digitalWrite(pin_cool, LOW);
       digitalWrite(pin_spd, LOW);
-    } 
+    }
 
 
 /*
@@ -151,7 +152,7 @@ void loop() {
   // TODO insert PID algorithm
 
 
-/*  
+/*
  *  calculate the heat exchanger efficency
  *  --------------------------------------
  */
@@ -160,10 +161,10 @@ void loop() {
   in_wa_en = cp*rho*(in_wa_temp+273);
   ex_fr_en = cp*rho*(ex_fr_temp+273);
   efficiency = (ex_fr_en-in_fr_en)/(in_wa_en-in_fr_en);
-  
+
 //  if (in_fr_temp > in_wa_temp)
 //  {
-//    efficiency = 1-efficiency; 
+//    efficiency = 1-efficiency;
 //  }
 
 /*
@@ -174,21 +175,21 @@ void loop() {
 //  Serial.print("Fresh Inlet Temp: " );
 //  Serial.println(in_fr_temp);
 //  Serial.print("Waste Inlet Temp: " );
-//  Serial.println(in_wa_temp);  
+//  Serial.println(in_wa_temp);
 //  Serial.print("Fresh Outlet Temp: " );
-//  Serial.println(ex_fr_temp);  
+//  Serial.println(ex_fr_temp);
 //  Serial.print("Waste Outlet Temp: " );
-//  Serial.println(ex_wa_temp);  
-//  Serial.println("");  
-//  
+//  Serial.println(ex_wa_temp);
+//  Serial.println("");
+//
 //  Serial.print("Fresh Inlet Pressure: " );
-//  Serial.print(in_fr_pres/1000);    
-//  Serial.println("kPa");  
+//  Serial.print(in_fr_pres/1000);
+//  Serial.println("kPa");
 //  Serial.print("Fresh Inlet Humidity: " );
-//  Serial.print(in_fr_humd);  
+//  Serial.print(in_fr_humd);
 //  Serial.println("%");
-//  Serial.println("");   
-//    
+//  Serial.println("");
+//
 //  Serial.print("Heat Exchanger Efficiency: ");
 //  Serial.print(efficiency*100);
 //  Serial.println("%");
@@ -200,7 +201,7 @@ void loop() {
 //  Serial.println(digitalRead(pin_byp));
 //
 //  Serial.print("Cooling Mode: ");
-//  Serial.println(digitalRead(pin_cool)); 
+//  Serial.println(digitalRead(pin_cool));
 
   //raw sensor data to serial lines
 //  Serial.print(in_fr_temp);
@@ -211,11 +212,11 @@ void loop() {
   Serial.print(",");
   Serial.println(ex_wa_temp);
 
-  
-  
+
+
  // delay(3000);  // delete this & replace with sensible delay
 
-  
+
   delta_av = delta_av + (in_fr_temp - in_wa_temp);
   counter = counter + 1;
 //
@@ -226,12 +227,8 @@ void loop() {
 //    }
 
 //  Serial.print("counter: ");
-//  Serial.println(counter);    
+//  Serial.println(counter);
 //  Serial.print("running average: ");
-//  Serial.println(delta_av/counter);    
+//  Serial.println(delta_av/counter);
 
 }
-
-
-
-
